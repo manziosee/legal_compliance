@@ -1,0 +1,62 @@
+/* Compliance Dashboard Styles */
+.o_kanban_compliance .o_kanban_record {
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.o_kanban_compliance .o_kanban_record_top {
+    padding-left: 8px;
+}
+
+.o_kanban_compliance .o_kanban_record_bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    font-size: 0.9em;
+}
+
+.compliance_status_widget {
+    display: flex;
+    justify-content: space-around;
+    margin: 16px 0;
+}
+
+.compliance_status_item {
+    padding: 8px 16px;
+    text-align: center;
+}
+
+.compliance_status_count {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.compliance_status_label {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+/* Form Styles */
+.compliance_form_header {
+    margin-bottom: 16px;
+}
+
+.compliance_form_section {
+    margin-bottom: 24px;
+}
+
+/* Tree View Styles */
+.o_list_view .text-danger {
+    color: #dc3545;
+}
+
+.o_list_view .text-warning {
+    color: #fd7e14;
+}
+
+.o_list_view .text-success {
+    color: #28a745;
+}

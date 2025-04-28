@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Check Tree View -->
+        <record id="view_compliance_check_tree" model="ir.ui.view">
+            <field name="name">compliance.check.tree</field>
+            <field name="model">compliance.check</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="rule_id"/>
+                    <field name="check_date"/>
+                    <field name="result" widget="badge"/>
+                    <field name="responsible_id" widget="many2one_avatar"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Check Form View -->
+        <record id="view_compliance_check_form" model="ir.ui.view">
+            <field name="name">compliance.check.form</field>
+            <field name="model">compliance.check</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_check_compliance" string="Check Compliance" type="action" class="oe_highlight" states="draft"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="rule_id"/>
+                                <field name="category_id"/>
+                                <field name="department"/>
+                            </group>
+                            <group>
+                                <field name="check_date"/>
+                                <field name="responsible_id"/>
+                                <field name="result"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Details">
+                                <field name="notes" placeholder="Enter details about the compliance check..."/>
+                            </page>
+                            <page string="Documents">
+                                <field name="document_ids" context="{'default_check_id': id}">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="upload_date"/>
+                                        <field name="expiry_date"/>
+                                        <field name="is_valid" widget="boolean"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="file" filename="file_name"/>
+                                            <field name="expiry_date"/>
+                                            <field name="description"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Check Action -->
+        <record id="action_compliance_check" model="ir.actions.act_window">
+            <field name="name">Compliance Checks</field>
+            <field name="res_model">compliance.check</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No compliance checks found
+                </p>
+            </field>
+        </record>
+        
+        <!-- Check Menu -->
+        <menuitem id="menu_compliance_checks" name="Checks" parent="menu_compliance_root" action="action_compliance_check" sequence="30"/>
+    </data>
+</odoo>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Rule Tree View -->
+        <record id="view_compliance_rule_tree" model="ir.ui.view">
+            <field name="name">compliance.rule.tree</field>
+            <field name="model">compliance.rule</field>
+            <field name="arch" type="xml">
+                <tree colors="gray:state=='archived';red:priority=='3'" decoration-muted="state=='archived'">
+                    <field name="name"/>
+                    <field name="category_id" widget="many2one_tags"/>
+                    <field name="department"/>
+                    <field name="priority" widget="priority"/>
+                    <field name="state"/>
+                    <field name="next_check_date"/>
+                    <field name="responsible_id" widget="many2one_avatar"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Rule Kanban View -->
+        <record id="view_compliance_rule_kanban" model="ir.ui.view">
+            <field name="name">compliance.rule.kanban</field>
+            <field name="model">compliance.rule</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="category_id" class="o_kanban_compliance">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_record_top mb16" t-attf-style="border-left: 3px solid #{{record.color.raw_value or '875A7B'}}">
+                                    <div class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </div>
+                                    <div class="text-muted">
+                                        <field name="category_id" widget="many2one_tags"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div>
+                                        <field name="department" widget="badge"/>
+                                        <field name="priority" widget="priority"/>
+                                    </div>
+                                    <div>
+                                        <field name="next_check_date" widget="date"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom mt8">
+                                    <div>
+                                        <field name="responsible_id" widget="many2one_avatar"/>
+                                    </div>
+                                    <div>
+                                        <field name="state" widget="badge"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Rule Form View -->
+        <record id="view_compliance_rule_form" model="ir.ui.view">
+            <field name="name">compliance.rule.form</field>
+            <field name="model">compliance.rule</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_set_draft" string="Set to Draft" states="active,archived" type="object" class="oe_highlight"/>
+                        <button name="action_activate" string="Activate" states="draft" type="object" class="oe_highlight"/>
+                        <button name="action_archive" string="Archive" states="active" type="object" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,active,archived"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Compliance Rule Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="category_id"/>
+                                <field name="department"/>
+                                <field name="priority" widget="priority"/>
+                                <field name="responsible_id"/>
+                            </group>
+                            <group>
+                                <field name="reference"/>
+                                <field name="jurisdiction"/>
+                                <field name="state" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Details">
+                                <field name="description" placeholder="Enter detailed description of the compliance requirement..."/>
+                            </page>
+                            <page string="Schedule">
+                                <group>
+                                    <group>
+                                        <field name="is_recurring"/>
+                                        <field name="frequency" attrs="{'invisible': [('is_recurring', '=', False)]}"/>
+                                        <field name="custom_frequency" attrs="{'invisible': [('frequency', '!=', 'custom')]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="last_check_date" readonly="1"/>
+                                        <field name="next_check_date" readonly="1"/>
+                                        <field name="alert_days_before"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Checks">
+                                <field name="check_ids" context="{'default_rule_id': id}">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="check_date"/>
+                                        <field name="result"/>
+                                        <field name="responsible_id" widget="many2one_avatar"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="check_date"/>
+                                            <field name="result"/>
+                                            <field name="responsible_id"/>
+                                            <field name="notes"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Documents">
+                                <field name="document_ids" context="{'default_rule_id': id}">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="upload_date"/>
+                                        <field name="expiry_date"/>
+                                        <field name="is_valid" widget="boolean"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="file" filename="file_name"/>
+                                            <field name="expiry_date"/>
+                                            <field name="description"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Rule Action -->
+        <record id="action_compliance_rule" model="ir.actions.act_window">
+            <field name="name">Compliance Rules</field>
+            <field name="res_model">compliance.rule</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first compliance rule
+                </p>
+            </field>
+        </record>
+        
+        <!-- Rule Menu -->
+        <menuitem id="menu_compliance_rules" name="Rules" parent="menu_compliance_root" action="action_compliance_rule" sequence="20"/>
+    </data>
+</odoo>

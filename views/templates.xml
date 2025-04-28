@@ -1,24 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-<!--
-        <template id="listing">
-          <ul>
-            <li t-foreach="objects" t-as="object">
-              <a t-attf-href="#{ root }/objects/#{ object.id }">
-                <t t-esc="object.display_name"/>
-              </a>
-            </li>
-          </ul>
+        <!-- Custom CSS -->
+        <template id="assets_backend" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/legal_compliance/static/src/css/compliance.css"/>
+                <script type="text/javascript" src="/legal_compliance/static/src/js/compliance.js"></script>
+            </xpath>
         </template>
-        <template id="object">
-          <h1><t t-esc="object.display_name"/></h1>
-          <dl>
-            <t t-foreach="object._fields" t-as="field">
-              <dt><t t-esc="field"/></dt>
-              <dd><t t-esc="object[field]"/></dd>
-            </t>
-          </dl>
+        
+        <!-- Compliance Status Widget -->
+        <template id="compliance_status_widget">
+            <div class="compliance_status_widget">
+                <t t-foreach="widget.status_data" t-as="status">
+                    <div class="compliance_status_item" t-attf-style="border-left: 3px solid #{{status.color}};">
+                        <div class="compliance_status_count">{{status.count}}</div>
+                        <div class="compliance_status_label">{{status.name}}</div>
+                    </div>
+                </t>
+            </div>
         </template>
--->
     </data>
 </odoo>

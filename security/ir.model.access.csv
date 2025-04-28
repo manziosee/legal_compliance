@@ -1,2 +1,9 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_legal_compliance_legal_compliance,legal_compliance.legal_compliance,model_legal_compliance_legal_compliance,base.group_user,1,1,1,1
+access_compliance_category,compliance.category,model_compliance_category,base.group_user,1,1,1,0
+access_compliance_rule,compliance.rule,model_compliance_rule,base.group_user,1,1,1,0
+access_compliance_check,compliance.check,model_compliance_check,base.group_user,1,1,1,0
+access_compliance_document,compliance.document,model_compliance_document,base.group_user,1,1,1,0
+access_compliance_category_manager,compliance.category,model_compliance_category,base.group_erp_manager,1,1,1,1
+access_compliance_rule_manager,compliance.rule,model_compliance_rule,base.group_erp_manager,1,1,1,1
+access_compliance_check_manager,compliance.check,model_compliance_check,base.group_erp_manager,1,1,1,1
+access_compliance_document_manager,compliance.document,model_compliance_document,base.group_erp_manager,1,1,1,1

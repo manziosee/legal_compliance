@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Dashboard View -->
+        <record id="view_compliance_dashboard" model="ir.ui.view">
+            <field name="name">compliance.dashboard</field>
+            <field name="model">compliance.rule</field>
+            <field name="arch" type="xml">
+                <dashboard>
+                    <view type="kanban" ref="view_compliance_rule_kanban"/>
+                    <group>
+                        <group string="Compliance Status">
+                            <kanban class="o_kanban_dashboard">
+                                <field name="id"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div class="oe_kanban_content">
+                                            <div class="o_kanban_card">
+                                                <div class="o_kanban_primary_left">
+                                                    <div class="o_primary">
+                                                        <span class="o_value">${widget.model.search_count([('state', '=', 'active')])}</span>
+                                                        <span class="o_label">Active Rules</span>
+                                                    </div>
+                                                </div>
+                                                <div class="o_kanban_primary_right">
+                                                    <div class="o_primary">
+                                                        <span class="o_value" t-esc="widget.model.search_count([('state', '=', 'active'), ('next_check_date', '&lt;=', fields.Date.today())])"/>
+                                                        <span class="o_label">Due for Check</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </group>
+                        <group string="By Department">
+                            <pie chart="compliance_by_department">
+                                <field name="department"/>
+                                <field name="id" type="measure"/>
+                            </pie>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Upcoming Checks">
+                            <tree>
+                                <field name="name"/>
+                                <field name="category_id"/>
+                                <field name="next_check_date"/>
+                                <field name="responsible_id" widget="many2one_avatar"/>
+                            </tree>
+                        </group>
+                        <group string="Recent Checks">
+                            <tree>
+                                <field name="check_ids/name"/>
+                                <field name="check_ids/check_date"/>
+                                <field name="check_ids/result"/>
+                            </tree>
+                        </group>
+                    </group>
+                </dashboard>
+            </field>
+        </record>
+        
+        <!-- Alert Action -->
+        <record id="action_compliance_dashboard" model="ir.actions.act_window">
+            <field name="name">Compliance Dashboard</field>
+            <field name="res_model">compliance.rule</field>
+            <field name="view_mode">dashboard,tree,form</field>
+            <field name="view_id" ref="view_compliance_dashboard"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Set up your compliance rules to get started
+                </p>
+            </field>
+        </record>
+        
+        <!-- Alert Menu -->
+        <menuitem id="menu_compliance_dashboard" name="Dashboard" parent="menu_compliance_root" action="action_compliance_dashboard" sequence="5"/>
+    </data>
+</odoo>
