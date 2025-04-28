@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_legal_compliance_legal_compliance,legal_compliance.legal_compliance,model_legal_compliance_legal_compliance,base.group_user,1,1,1,1
