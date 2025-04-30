@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Email Templates -->
+        <record id="email_template_compliance_alert" model="mail.template">
+            <field name="name">Compliance Alert</field>
+            <field name="model_id" ref="model_compliance_rule"/>
+            <field name="email_from">${object.company_id.email or ''}</field>
+            <field name="subject">Compliance Alert: ${object.name}</field>
+            <field name="email_to">${object.responsible_id.email_formatted or ''}</field>
+            <field name="body_html"><![CDATA[
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #875A7B;">Compliance Alert</h2>
+                    <p>Dear ${object.responsible_id.name},</p>
+                    
+                    <p>The compliance check for <strong>${object.name}</strong> is due on <strong>${format_date(object.next_check_date)}</strong>.</p>
+                    
+                    <p><strong>Category:</strong> ${object.category_id.name}<br/>
+                    <strong>Department:</strong> ${dict(object._fields['department'].selection).get(object.department)}<br/>
+                    <strong>Priority:</strong> ${dict(object._fields['priority'].selection).get(object.priority)}</p>
+                    
+                    <p>Please ensure this compliance requirement is addressed before the due date.</p>
+                    
+                    <div style="margin-top: 20px; padding: 10px; background-color: #f8f9fa; border-left: 4px solid #875A7B;">
+                        <p><strong>Description:</strong><br/>${object.description or 'No description provided'}</p>
+                    </div>
+                    
+                    <p style="margin-top: 20px;">
+                        <a href="${object.get_base_url()}/web#id=${object.id}&model=compliance.rule&view_type=form" 
+                           style="background-color: #875A7B; color: white; padding: 10px 15px; text-decoration: none; border-radius: 3px;">
+                            View Compliance Rule
+                        </a>
+                    </p>
+                    
+                    <p style="margin-top: 30px; font-size: 0.9em; color: #6c757d;">
+                        This is an automated notification from ${object.company_id.name}'s Compliance Management System.
+                    </p>
+                </div>
+            ]]></field>
+        </record>
+        
+        <!-- Activity Types -->
+        <record id="mail_activity_compliance_check" model="mail.activity.type">
+            <field name="name">Compliance Check</field>
+            <field name="summary">Compliance check due</field>
+            <field name="category">upload_file</field>
+            <field name="res_model">compliance.rule</field>
+        </record>
+        
+        <!-- Sequence for Compliance Checks -->
+        <record id="seq_compliance_check" model="ir.sequence">
+            <field name="name">Compliance Check Reference</field>
+            <field name="code">compliance.check</field>
+            <field name="prefix">COMP-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <!-- Default Categories -->
+        <record id="category_tax" model="compliance.category">
+            <field name="name">Tax Compliance</field>
+            <field name="sequence">10</field>
+            <field name="color">1</field>
+        </record>
+        
+        <record id="category_hr" model="compliance.category">
+            <field name="name">HR Compliance</field>
+            <field name="sequence">20</field>
+            <field name="color">2</field>
+        </record>
+        
+        <record id="category_safety" model="compliance.category">
+            <field name="name">Health & Safety</field>
+            <field name="sequence">30</field>
+            <field name="color">3</field>
+        </record>
+        
+        <record id="category_environmental" model="compliance.category">
+            <field name="name">Environmental</field>
+            <field name="sequence">40</field>
+            <field name="color">4</field>
+        </record>
+        
+        <record id="category_data" model="compliance.category">
+            <field name="name">Data Protection</field>
+            <field name="sequence">50</field>
+            <field name="color">5</field>
+        </record>
+    </data>
+</odoo>

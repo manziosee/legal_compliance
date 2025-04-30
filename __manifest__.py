@@ -1,34 +1,39 @@
-# -*- coding: utf-8 -*-
 {
-    'name': "legal_compliance",
-
-    'summary': "Short (1 phrase/line) summary of the module's purpose",
-
+    'name': 'Legal Compliance Management',
+    'version': '1.0',
+    'summary': 'Track legal rules, ensure compliance, and avoid fines',
     'description': """
-Long description of module's purpose
+        Comprehensive legal compliance management system that tracks tax, HR, and safety regulations,
+        checks business compliance, alerts about issues, and documents proof for audits.
     """,
-
-    'author': "My Company",
-    'website': "https://www.yourcompany.com",
-
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
-    # for the full list
-    'category': 'Uncategorized',
-    'version': '0.1',
-
-    # any module necessary for this one to work correctly
-    'depends': ['base'],
-
-    # always loaded
+    'author': 'Your Name',
+    'website': 'https://www.yourwebsite.com',
+    'category': 'Legal',
+    'depends': ['base', 'mail', 'calendar', 'document'],
     'data': [
-        # 'security/ir.model.access.csv',
-        'views/views.xml',
+        'security/security_rules.xml',
+        'security/ir.model.access.csv',
+        'data/compliance_data.xml',
+        'views/compliance_category_views.xml',
+        'views/compliance_rule_views.xml',
+        'views/compliance_check_views.xml',
+        'views/compliance_alert_views.xml',
+        'views/compliance_document_views.xml',
+        'views/res_config_settings_views.xml',
+        'views/menu_views.xml',
         'views/templates.xml',
     ],
-    # only loaded in demonstration mode
-    'demo': [
-        'demo/demo.xml',
-    ],
+    'demo': ['demo/demo.xml'],
+    'assets': {
+        'web.assets_backend': [
+            'legal_compliance/static/src/css/compliance.css',
+            'legal_compliance/static/src/js/compliance.js',
+        ],
+        'web.assets_qweb': [
+            'legal_compliance/static/src/xml/*.xml',
+        ],
+    },
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
 }
-

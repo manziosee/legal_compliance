@@ -1,22 +1,49 @@
-# -*- coding: utf-8 -*-
-# from odoo import http
+from odoo import http
+from odoo.http import request
 
-
-# class LegalCompliance(http.Controller):
-#     @http.route('/legal_compliance/legal_compliance', auth='public')
-#     def index(self, **kw):
-#         return "Hello, world"
-
-#     @http.route('/legal_compliance/legal_compliance/objects', auth='public')
-#     def list(self, **kw):
-#         return http.request.render('legal_compliance.listing', {
-#             'root': '/legal_compliance/legal_compliance',
-#             'objects': http.request.env['legal_compliance.legal_compliance'].search([]),
-#         })
-
-#     @http.route('/legal_compliance/legal_compliance/objects/<model("legal_compliance.legal_compliance"):obj>', auth='public')
-#     def object(self, obj, **kw):
-#         return http.request.render('legal_compliance.object', {
-#             'object': obj
-#         })
-
+class ComplianceController(http.Controller):
+    
+    @http.route('/compliance/check_due', auth='user', type='json')
+    def check_due_compliance(self):
+        """ Return count of due compliance checks """
+        user = request.env.user
+        Rule = request.env['compliance.rule']
+        
+        due_count = Rule.search_count([
+            ('state', '=', 'active'),
+            ('is_recurring', '=', True),
+            ('next_check_date', '<=', fields.Date.today()),
+            ('responsible_id', '=', user.id),
+        ])
+        
+        return {
+            'due_count': due_count,
+        }
+    
+    @http.route('/compliance/dashboard_data', auth='user', type='json')
+    def get_dashboard_data(self):
+        """ Return data for compliance dashboard """
+        Rule = request.env['compliance.rule']
+        Check = request.env['compliance.check']
+        
+        # Count by status
+        status_data = [
+            {'name': 'Active', 'count': Rule.search_count([('state', '=', 'active')]), 'color': '2ecc71'},
+            {'name': 'Draft', 'count': Rule.search_count([('state', '=', 'draft')]), 'color': '3498db'},
+            {'name': 'Archived', 'count': Rule.search_count([('state', '=', 'archived')]), 'color': 'e74c3c'},
+        ]
+        
+        # Recent checks
+        recent_checks = Check.search([], limit=5, order='check_date desc')
+        checks_data = [{
+            'id': check.id,
+            'name': check.name,
+            'rule': check.rule_id.name,
+            'date': check.check_date,
+            'result': dict(check._fields['result'].selection).get(check.result),
+        } for check in recent_checks]
+        
+        return {
+            'status_data': status_data,
+            'checks_data': checks_data,
+        }

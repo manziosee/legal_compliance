@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Main Compliance Menu -->
+        <menuitem id="menu_compliance_root" name="Legal Compliance" sequence="100"/>
+        <menuitem id="menu_compliance_configuration" name="Configuration" parent="menu_compliance_root" sequence="1000"/>
+        
+        <!-- Settings Menu Item -->
+        <record id="menu_compliance_config_settings" model="ir.ui.menu">
+            <field name="name">Settings</field>
+            <field name="parent_id" ref="menu_compliance_configuration"/>
+            <field name="action" ref="action_compliance_config_settings"/>
+            <field name="sequence">10</field>
+        </record>
+    </data>
+</odoo>

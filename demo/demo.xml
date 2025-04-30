@@ -1,30 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-<!--
-          <record id="object0" model="legal_compliance.legal_compliance">
-            <field name="name">Object 0</field>
-            <field name="value">0</field>
-          </record>
-
-          <record id="object1" model="legal_compliance.legal_compliance">
-            <field name="name">Object 1</field>
-            <field name="value">10</field>
-          </record>
-
-          <record id="object2" model="legal_compliance.legal_compliance">
-            <field name="name">Object 2</field>
-            <field name="value">20</field>
-          </record>
-
-          <record id="object3" model="legal_compliance.legal_compliance">
-            <field name="name">Object 3</field>
-            <field name="value">30</field>
-          </record>
-
-          <record id="object4" model="legal_compliance.legal_compliance">
-            <field name="name">Object 4</field>
-            <field name="value">40</field>
-          </record>
--->
+    <data noupdate="0">
+        <!-- Sample Compliance Rules -->
+        <record id="rule_tax_filing" model="compliance.rule">
+            <field name="name">Monthly Tax Filing</field>
+            <field name="category_id" ref="category_tax"/>
+            <field name="department">accounting</field>
+            <field name="priority">2</field>
+            <field name="description">Monthly tax filing requirement for all businesses with revenue over $50,000</field>
+            <field name="reference">IRS Regulation 123.45</field>
+            <field name="is_recurring">True</field>
+            <field name="frequency">monthly</field>
+            <field name="last_check_date" eval="(datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')"/>
+            <field name="alert_days_before">5</field>
+            <field name="state">active</field>
+            <field name="responsible_id" ref="base.user_admin"/>
+        </record>
+        
+        <record id="rule_employee_training" model="compliance.rule">
+            <field name="name">Annual Safety Training</field>
+            <field name="category_id" ref="category_safety"/>
+            <field name="department">hr</field>
+            <field name="priority">1</field>
+            <field name="description">All employees must complete annual safety training</field>
+            <field name="reference">OSHA Standard 1910.120</field>
+            <field name="is_recurring">True</field>
+            <field name="frequency">yearly</field>
+            <field name="last_check_date" eval="(datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')"/>
+            <field name="alert_days_before">30</field>
+            <field name="state">active</field>
+            <field name="responsible_id" ref="base.user_admin"/>
+        </record>
+        
+        <record id="rule_data_protection" model="compliance.rule">
+            <field name="name">Data Protection Audit</field>
+            <field name="category_id" ref="category_data"/>
+            <field name="department">other</field>
+            <field name="priority">3</field>
+            <field name="description">Quarterly audit of data protection measures and access controls</field>
+            <field name="reference">GDPR Article 32</field>
+            <field name="is_recurring">True</field>
+            <field name="frequency">quarterly</field>
+            <field name="last_check_date" eval="(datetime.now() - timedelta(days=90)).strftime('%Y-%m-%d')"/>
+            <field name="alert_days_before">14</field>
+            <field name="state">active</field>
+            <field name="responsible_id" ref="base.user_admin"/>
+        </record>
+        
+        <!-- Sample Compliance Checks -->
+        <record id="check_tax_filing_last" model="compliance.check">
+            <field name="rule_id" ref="rule_tax_filing"/>
+            <field name="check_date" eval="(datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')"/>
+            <field name="responsible_id" ref="base.user_admin"/>
+            <field name="result">compliant</field>
+            <field name="notes">Tax filing submitted on time with all required documentation.</field>
+        </record>
+        
+        <record id="check_safety_training_last" model="compliance.check">
+            <field name="rule_id" ref="rule_employee_training"/>
+            <field name="check_date" eval="(datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')"/>
+            <field name="responsible_id" ref="base.user_admin"/>
+            <field name="result">compliant</field>
+            <field name="notes">All employees completed the required safety training. Records maintained in HR system.</field>
+        </record>
+        
+        <!-- Sample Compliance Documents -->
+        <record id="doc_tax_filing" model="compliance.document">
+            <field name="name">Tax Filing Receipt - March 2023</field>
+            <field name="rule_id" ref="rule_tax_filing"/>
+            <field name="check_id" ref="check_tax_filing_last"/>
+            <field name="description">IRS filing receipt for monthly taxes</field>
+            <field name="upload_date" eval="(datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')"/>
+            <field name="upload_user_id" ref="base.user_admin"/>
+        </record>
     </data>
 </odoo>
