@@ -6,10 +6,11 @@
         Comprehensive legal compliance management system that tracks tax, HR, and safety regulations,
         checks business compliance, alerts about issues, and documents proof for audits.
     """,
-    'author': 'Your Name',
-    'website': 'https://www.yourwebsite.com',
+    'author': 'Manzi Osee',
+    'website': 'https://www.sicrwanda.com/',
+    'company': 'SIC Rwanda',
     'category': 'Legal',
-    'depends': ['base', 'mail', 'calendar', 'document'],
+    'depends': ['base', 'mail', 'calendar', 'attachment_index'],
     'data': [
         'security/security_rules.xml',
         'security/ir.model.access.csv',
