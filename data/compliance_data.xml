@@ -13,20 +13,20 @@
                     <h2 style="color: #875A7B;">Compliance Alert</h2>
                     <p>Dear ${object.responsible_id.name},</p>
                     
-                    <p>The compliance check for <strong>${object.name}</strong> is due on <strong>${format_date(object.next_check_date)}</strong>.</p>
+                    <p>The compliance check for &lt;strong&gt;${object.name}&lt;/strong&gt; is due on &lt;strong&gt;${format_date(object.next_check_date)}&lt;/strong&gt;.</p>
                     
-                    <p><strong>Category:</strong> ${object.category_id.name}<br/>
-                    <strong>Department:</strong> ${dict(object._fields['department'].selection).get(object.department)}<br/>
-                    <strong>Priority:</strong> ${dict(object._fields['priority'].selection).get(object.priority)}</p>
+                    <p>&lt;strong&gt;Category:&lt;/strong&gt; ${object.category_id.name}&lt;br/&gt;
+                    &lt;strong&gt;Department:&lt;/strong&gt; ${dict(object._fields['department'].selection).get(object.department)}&lt;br/&gt;
+                    &lt;strong&gt;Priority:&lt;/strong&gt; ${dict(object._fields['priority'].selection).get(object.priority)}</p>
                     
                     <p>Please ensure this compliance requirement is addressed before the due date.</p>
                     
                     <div style="margin-top: 20px; padding: 10px; background-color: #f8f9fa; border-left: 4px solid #875A7B;">
-                        <p><strong>Description:</strong><br/>${object.description or 'No description provided'}</p>
+                        <p>&lt;strong&gt;Description:&lt;/strong&gt;&lt;br/&gt;${object.description or 'No description provided'}</p>
                     </div>
                     
                     <p style="margin-top: 20px;">
-                        <a href="${object.get_base_url()}/web#id=${object.id}&model=compliance.rule&view_type=form" 
+                        <a href="${object.get_base_url()}/web#id=${object.id}&amp;model=compliance.rule&amp;view_type=form" 
                            style="background-color: #875A7B; color: white; padding: 10px 15px; text-decoration: none; border-radius: 3px;">
                             View Compliance Rule
                         </a>
@@ -70,7 +70,7 @@
         </record>
         
         <record id="category_safety" model="compliance.category">
-            <field name="name">Health & Safety</field>
+            <field name="name">Health &amp; Safety</field>
             <field name="sequence">30</field>
             <field name="color">3</field>
         </record>

@@ -6,7 +6,7 @@
             <field name="name">compliance.category.tree</field>
             <field name="model">compliance.category</field>
             <field name="arch" type="xml">
-                <tree colors="gray:active==False" decoration-muted="active==False">
+                <tree>
                     <field name="sequence" widget="handle"/>
                     <field name="name"/>
                     <field name="active" widget="boolean_toggle"/>
@@ -22,8 +22,8 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="action_archive" string="Archive" states="active" type="object" class="oe_highlight"/>
-                        <button name="action_unarchive" string="Unarchive" states="archived" type="object" class="oe_highlight"/>
+                        <button name="toggle_active" string="Archive" states="active" type="object" class="oe_highlight"/>
+                        <button name="toggle_active" string="Unarchive" states="archived" type="object" class="oe_highlight"/>
                         <field name="active" invisible="1"/>
                     </header>
                     <sheet>

@@ -5,13 +5,19 @@ class ComplianceDocument(models.Model):
     _name = 'compliance.document'
     _description = 'Compliance Document'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'upload_date desc'
 
     name = fields.Char(string='Document Name', required=True)
     rule_id = fields.Many2one('compliance.rule', string='Related Rule', ondelete='cascade')
     check_id = fields.Many2one('compliance.check', string='Related Check', ondelete='cascade')
     description = fields.Text(string='Description')
-    file = fields.Binary(string='File', attachment=True)
-    file_name = fields.Char(string='File Name')
+    
+    # Using standard Odoo attachment fields
+    attachment_id = fields.Many2one('ir.attachment', string='Attachment')
+    attachment_name = fields.Char(related='attachment_id.name', string='File Name')
+    attachment_type = fields.Char(related='attachment_id.mimetype', string='Type')
+    attachment_size = fields.Integer(related='attachment_id.file_size', string='Size')
+    
     upload_date = fields.Date(string='Upload Date', default=fields.Date.today)
     upload_user_id = fields.Many2one('res.users', string='Uploaded By', default=lambda self: self.env.user)
     expiry_date = fields.Date(string='Expiry Date')
@@ -25,15 +31,18 @@ class ComplianceDocument(models.Model):
 
     def action_open_document(self):
         self.ensure_one()
-        return {
-            'name': self.name,
-            'type': 'ir.actions.act_url',
-            'url': f'/web/content/compliance.document/{self.id}/file/{self.file_name}',
-            'target': 'new',
-        }
+        if self.attachment_id:
+            return {
+                'type': 'ir.actions.act_url',
+                'url': f'/web/content/{self.attachment_id.id}?download=true',
+                'target': 'new',
+            }
+        raise UserError(_("No attachment found for this document"))
 
-    @api.constrains('expiry_date')
-    def _check_expiry_date(self):
-        for doc in self:
-            if doc.expiry_date and doc.expiry_date < fields.Date.today():
-                raise ValidationError(_("Expiry date cannot be in the past!"))
+    @api.model
+    def create(self, vals):
+        if vals.get('attachment_id'):
+            attachment = self.env['ir.attachment'].browse(vals['attachment_id'])
+            if not vals.get('name'):
+                vals['name'] = attachment.name
+        return super().create(vals)
