@@ -1,6 +1,6 @@
 {
     'name': 'Legal Compliance Management',
-    'version': '1.0',
+    'version': '1.0.2',
     'summary': 'Track legal rules, ensure compliance, and avoid fines',
     'description': """
         Comprehensive legal compliance management system that tracks tax, HR, and safety regulations,
@@ -10,7 +10,7 @@
     'website': 'https://www.sicrwanda.com/',
     'company': 'SIC Rwanda',
     'category': 'Legal',
-    'depends': ['base', 'mail', 'calendar', 'attachment_index'],
+    'depends': ['base', 'mail', 'calendar'],
     'data': [
         'security/security_rules.xml',
         'security/ir.model.access.csv',
